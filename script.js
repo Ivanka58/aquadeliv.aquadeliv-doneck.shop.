@@ -4,7 +4,8 @@ const slogansList = [
     "🚿 Доставка без лишних хлопот",
     "🏠 Вода в дом — чисто и удобно",
     "⚡ Быстрая доставка, честные цены",
-    "💧 Чистая техвода от 100 литров"
+    "💧 Чистая техвода от 100 литров",
+    "🛢️ Бочки и резервуары — вода всегда с вами"
 ];
 let sloganIdx = 0;
 const sloganElement = document.getElementById('typingSlogan');
@@ -57,18 +58,22 @@ setInterval(updateCountdown, 1000);
 // === Модалки ===
 const waterModal = document.getElementById('waterModal');
 const cargoModal = document.getElementById('cargoModal');
+const tankModal = document.getElementById('tankModal');
 const cityModal = document.getElementById('cityModal');
 const openWater = document.getElementById('openWaterModalBtn');
 const openCargo = document.getElementById('openCargoModalBtn');
+const openTank = document.getElementById('openTankModalBtn');
 const closes = document.querySelectorAll('.close');
 
 if (openWater) openWater.onclick = () => waterModal.style.display = 'flex';
 if (openCargo) openCargo.onclick = () => cargoModal.style.display = 'flex';
+if (openTank) openTank.onclick = () => tankModal.style.display = 'flex';
 
 closes.forEach(close => {
     close.onclick = () => {
         if (waterModal) waterModal.style.display = 'none';
         if (cargoModal) cargoModal.style.display = 'none';
+        if (tankModal) tankModal.style.display = 'none';
         if (cityModal) cityModal.style.display = 'none';
     };
 });
@@ -76,6 +81,7 @@ closes.forEach(close => {
 window.onclick = (e) => {
     if (e.target === waterModal) waterModal.style.display = 'none';
     if (e.target === cargoModal) cargoModal.style.display = 'none';
+    if (e.target === tankModal) tankModal.style.display = 'none';
     if (e.target === cityModal) cityModal.style.display = 'none';
 };
 
@@ -118,6 +124,18 @@ document.querySelectorAll('.faq-question').forEach(question => {
         if (!isOpen) item.classList.add('open');
     });
 });
+
+// === Плавное появление блоков при скролле ===
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            revealObserver.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
 // === Поддержка: кружок справа внизу ===
 let supportCircle = document.getElementById('supportCircle');
@@ -185,7 +203,7 @@ if (!document.querySelector('#supportCircleStyle')) {
             display: none;
         }
         .support-icon {
-            background: #2ecc71;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
             width: 60px;
             height: 60px;
             border-radius: 50%;
@@ -193,20 +211,24 @@ if (!document.querySelector('#supportCircleStyle')) {
             align-items: center;
             justify-content: center;
             font-size: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+            transition: 0.2s;
+        }
+        .support-circle:hover .support-icon {
+            transform: scale(1.08);
         }
         .support-bubble {
             position: absolute;
-            bottom: 70px;
+            bottom: 72px;
             right: 0;
             background: white;
             padding: 12px 18px;
-            border-radius: 20px;
+            border-radius: 20px 20px 4px 20px;
             font-size: 14px;
             font-weight: 500;
             white-space: normal;
             max-width: 260px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
             color: #1f3b45;
         }
     `;
